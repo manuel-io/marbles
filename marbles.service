@@ -1,0 +1,13 @@
+[Unit]
+Description = Marbles Webservice
+After = network.target
+
+[Service]
+User = marbles
+Group = www-data
+WorkingDirectory = /home/marbles
+Environment="PATH=/home/marbles/bin"
+ExecStart=/home/marbles/bin/uwsgi --ini marbles.ini
+
+[Install]
+WantedBy=multi-user.target
