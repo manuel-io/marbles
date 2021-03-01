@@ -1,0 +1,124 @@
+{% from "_page.html" import head, disclaimer with context %}
+<!DOCTYPE html>
+<html>
+  <head>
+    {% block head %}
+      {{ head() }}
+    {% endblock%}
+
+    <style>
+      h2 {
+        font-family: 'ComicMono';
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #000;
+        border-bottom: 2px solid #000;
+        margin: 20px 5px 20px 5px;
+      }
+
+      table {
+        border-collapse: collapse;
+      }
+
+      table tr {
+        border-bottom: 1px solid #000;
+      }
+
+      td:first-child {
+      }
+
+      table > tbody tr {
+        border-left: 1px solid #000;
+        border-right: 1px solid #000;
+      }
+
+      table td {
+        width: 120px;
+        text-align: right;
+        white-space: nowrap;
+        box-sizing: border-box;
+        padding: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main style="width:100%;">
+      <section style="width:100%;">
+        <h2>Teams</h2>
+        <table>
+          <thead>
+            <tr>
+              <td></td>
+              <td>Name</td>
+              <td>Players</td>
+              <td>Points</td>
+              <td>Moves</td>
+              <td>Ratio</td>
+              <td>Conserv.</td>
+            </tr>
+          </thead>
+          <tbody>
+          {% for team in teams %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ team.name }}</td>
+              <td>{{ team.players }}</td>
+              <td>{{ team.total_points }}</td>
+              <td>{{ team.total_moves }}</td>
+              {% if team.total_moves > 0 %}
+                <td>{{ (team.total_points / team.total_moves) | round(1) }}</td>
+              {% else %}
+                <td>0</td>
+              {% endif %}
+              <td>{{ (team.conversion / (games * team.players)) | round(1) }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      <section style="width:100%;">
+        <h2>Players</h2>
+        <table>
+          <thead>
+            <tr>
+              <td></td>
+              <td>Name</td>
+              <td>Team</td>
+              <td>Points</td>
+              <td>Moves</td>
+              <td>Ratio</td>
+              <td>Conserv.</td>
+            </tr>
+          </thead>
+          <tbody>
+          {% for team in players %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ team.name }}</td>
+              <td>{{ team.team }}</td>
+              <td>{{ team.total_points }}</td>
+              <td>{{ team.total_moves }}</td>
+              {% if team.total_moves > 0 %}
+                <td>{{ (team.total_points / team.total_moves) | round(1) }}</td>
+              {% else %}
+                <td>0</td>
+              {% endif %}
+              <td>{{ (team.conversion / games) | round(1) }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </section>
+    </main>
+    
+    <div class="spacer"></div>
+
+    <aside>
+      {% block disclaimer %}
+        {{ disclaimer() }}
+      {% endblock%}
+    </aside>
+  </body>
+</html>

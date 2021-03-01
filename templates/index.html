@@ -1,0 +1,127 @@
+{% from "_page.html" import head, disclaimer with context %}
+<!DOCTYPE html>
+<html>
+  <head>
+    {% block head %}
+      {{ head() }}
+    {% endblock%}
+
+    <link rel='stylesheet' type='text/css' href='/static/styles/marbles.css'>
+    <script src='/static/libs/jquery-1.11.2.min.js'></script>
+    <script src='/static/libs/jcanvas.min.js'></script>
+    <script src='/static/scripts/marbles.js'></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <a class="btn" href="/" target="_blank">Moves: <span id='moves'></span></a>
+        <a class="btn" href="/" target="_blank">Points: <span id='points'></span></a>
+      </nav>
+
+      <dialog id="win_dialog" onclick="document.getElementById('win_dialog').style.display = 'none';">
+        <p>You made it!</p>
+      </dialog>
+
+      <dialog id="ask_dialog" open>
+        <form onsubmit="ask_formular(event);">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="level">
+
+          <fieldset class="error">
+            <label>Name:</label>
+            <input type="text" name="name" autocomplete="off" required>
+          </fieldset>
+          <fieldset class="error">
+            <label>Team:</label>
+            <input type="text" name="team" autocomplete="off" required>
+          </fieldset>
+          <fieldset>
+            <button type="submit">Start</button>
+          </fieldset>
+        </form>
+      </dialog>
+    </header>
+
+    <main>
+      <canvas title='Marbles Game' id='marbles' width='400' height='320'></canvas>
+    </main>
+
+    <footer>
+      <nav>
+        <button id="back">Back</button>
+        <button id="restart">Restart</button>
+        <button id="next">Next</button>
+      </nav>
+    </footer>
+
+    <aside>
+      {% block disclaimer %}
+        {{ disclaimer() }}
+      {% endblock%}
+    </aside>
+  </body>
+
+  <script>
+    window.ask_formular = (e) => {
+      e.preventDefault();
+      let data = new FormData(e.target);
+
+      let dialog = document.getElementById('ask_dialog');
+      dialog.style.display = 'none';
+
+      window.localStorage.setItem('name', data.get('name'));
+      window.localStorage.setItem('team', data.get('team'));
+
+      fetch('/create/' + data.get('level'), { 'method': 'POST', 'body': data, 'headers': { 'X-Type': 'Ajax' }})
+      .then(response => {
+
+        if (!response.ok) {
+          throw Error(response.status);
+        } else {
+          return response.text();
+        }
+
+      }).then(data => {
+        // console.log(data);
+      }).catch((data) => {
+        // console.log(data);
+      });
+    };
+
+    window.submit_formular = (data) => {
+      fetch('/update/' + data.get('level'), { 'method': 'POST', 'body': data, 'headers': { 'X-Type': 'Ajax' }})
+      .then(response => {
+
+        if (!response.ok) {
+          throw Error(response.status);
+        } else {
+          return response.text();
+        }
+
+      }).then(data => {
+        // console.log(data);
+      }).catch((data) => {
+        // console.log(data);
+      });
+    };
+
+    window.onload = (e) => {
+      let inputs = document.querySelectorAll('form fieldset.error input');
+      inputs.forEach((input) => {
+        input.classList.remove('required');
+        input.oninvalid = (e) => {
+           e.preventDefault();
+           input.classList.add('required');
+           let invalid = input.form.querySelector('form fieldset.error > .required:invalid');
+           invalid.focus();
+        };
+      });
+
+      let name = window.localStorage.getItem('name');
+      let team = window.localStorage.getItem('team');
+      if (name !== null) document.querySelector('input[name=name]').value = name;
+      if (team !== null) document.querySelector('input[name=team]').value = team;
+    };
+  </script>
+</html>

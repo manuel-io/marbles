@@ -1,0 +1,15 @@
+[uwsgi]
+module = wsgi:app
+
+master = true
+processes = 23
+
+pythonpath = /home/marbles
+socket = /run/marbles.sock
+chmod-socket = 660
+vacuum = true
+
+uid = marbles
+gid = www-data
+wsgi-disable-file-wrapper = true
+die-on-term = true

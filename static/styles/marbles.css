@@ -1,0 +1,100 @@
+header, footer {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+header {
+  margin-bottom: 20px;
+}
+
+footer {
+  margin-top: 20px;
+}
+
+main {
+  flex-grow: 1;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+main > canvas {
+  display: block;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+header nav,
+footer nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+img {
+  border: 0;
+}
+
+a, a:hover, a:active, a:visited {
+  color: #000;
+  text-decoration: none;
+  background-color: #efefef;
+}
+
+a.btn,
+button {
+	box-sizing: border-box;
+  padding: 10px;
+  margin: 5px;
+  font-family: 'ComicMono';
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  border: 1px solid #000;
+  border-radius: 5px;
+  background-color: #efefef;
+}
+
+a.btn:hover,
+button:hover {
+  background-color: #fff;
+}
+
+fieldset {
+  border: 0;
+}
+
+fieldset > button {
+  width: 100%;
+}
+
+input {
+  font-family: 'ComicMono';
+  font-size: 1em;
+  font-weight: bold;
+  border: 1px solid #000;
+  border-radius: 5px;
+	box-sizing: border-box;
+  padding: 10px;
+}
+
+input:focus {
+  border-width: 2px;
+  box-shadow: none;
+  appearance: none;
+  outline: none;
+}
+
+input:invalid {
+  box-shadow: none;
+  outline: none;
+}
+
+input.required:invalid {
+  border-color: #de1f1f;
+}
